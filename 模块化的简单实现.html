@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>模块化的简单实现</title>
+</head>
+<body>
+  
+<script>
+
+//获取某个函数模块
+// require(['fun1','fun2'],function(fun1,fun2){
+
+// })
+
+//定义某个函数模块
+// define('funNew',['fun1','fun2'],function(fun1,fun2){
+
+// })
+
+(function(global){
+  let modules={}
+  let require=function(ids,impl){
+    let reqs= []
+    for(let i = 0;i<ids.length;i++){
+      reqs[i]=modules[ids[i]]
+    }
+    impl.apply(impl,reqs)
+  }
+  let define = function(id,deps,impl){
+    let depsFun=[]
+    for(let i=0;i<deps.length;i++){
+      depsFun[i] = modules[deps[i]]
+    }
+    modules[id]=impl.bind(impl,...depsFun)
+  }
+  global.define=define
+  global.require=require
+  // global.modules=modules
+})(window?window:global)
+
+define('hehe',[],function(){
+  console.log('hehe')
+})
+
+define('xixi',['hehe'],function(hehe){
+  console.log('xixi依赖hehe')
+  hehe()
+})
+
+define('obj01',[],function(){
+  return {
+    name:'001'
+  }
+})
+
+require(['hehe','xixi'],function(hehe,xixi){
+  hehe()
+  xixi()
+})
+
+require(['obj01'],function(obj01){
+  obj = obj01()
+  console.log(obj)
+})
+
+
+</script>
+</body>
+</html>
