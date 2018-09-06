@@ -41,15 +41,16 @@
   // global.modules=modules
 })(window?window:global)
 
+//定义hehe函数
 define('hehe',[],function(){
   console.log('hehe')
 })
-
+//定义xixi函数
 define('xixi',['hehe'],function(hehe){
   console.log('xixi依赖hehe')
   hehe()
 })
-
+//定义obj01，函数返回一个对象。
 define('obj01',[],function(){
   return {
     name:'001'
